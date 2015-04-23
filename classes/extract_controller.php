@@ -26,34 +26,54 @@
 namespace tool_preserve;
 
 use \tool_preserve\local\dbdata;
-use \tool_preserve\local\xmldata;
+use \tool_preserve\local\xml;
 
 defined('MOODLE_INTERNAL') || die();
 
 class extract_controller {
 
-    var $users = false;
+    protected $users = false;
+    protected $files = false;
 
-    var $basepath = false;
+    protected $basepath = false;
+
+    const USER_TABLE = 'temp_preserve_users';
+    const FILE_TABLE = 'temp_preserve_files';
 
     public function __construct($basepath = false) {
+        global $DB;
         if ($basepath) {
-            $this->basepath = $basepath;
+            $this->users = new dbdata\user();
+            $this->users->create_temp_tables();
 
-            $this->users = new dbdata\users($basepath);
+            $this->files = new dbdata\file();
+            $this->files->create_temp_tables();
 
+            $parse = new xml\parser($basepath, $this->users);
+
+            $users = $this->users;
+            echo $DB->count_records($users::TABLE);
+
+            $parse = new xml\parser($basepath, $this->files);
+
+            $files = $this->files;
+            echo $DB->count_records($files::TABLE);
+
+
+            print_r(dbdata\base::get_record('file', 65519));
+
+            $this->drop_temp_tables();
         }
     }
 
-    public function setup_temp_tables() {
-        if ($this->users) {
-            $this->users->create_temp_tables();
-        }
+    public function create_temp_tables() {
+
     }
 
     public function drop_temp_tables() {
-        if ($this->users) {
-            $this->users->drop_temp_tables();
-        }
+        $this->users->drop_temp_tables();
+        $this->files->drop_temp_tables();
     }
 }
+
+
