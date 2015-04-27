@@ -23,43 +23,20 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_preserve\local\xml;
+namespace tool_preserve;
 
-
+//use \tool_preserve\local\dbdata;
+//use \tool_preserve\local\xml;
 
 defined('MOODLE_INTERNAL') || die();
 
-
-class parser {
-    protected $parser = null;
-    protected $processor = null;
-    protected $basepath = null;
-
-    public function __construct() {
-
-    }
-
-    public function setup($processor, $basepath) {
-        $this->set_processor($processor);
-        $this->set_basepath($basepath);
-    }
-
-    public function set_processor($processor) {
-        $this->processor = $processor;
-    }
-
-    public function set_basepath($basepath) {
-        $this->basepath = $basepath;
-    }
-
-    public function process() {
-        $this->parser = new \progressive_parser();
-        $this->parser->set_processor($this->processor);
-
-        $processor = $this->processor;
-        $this->parser->set_file($this->basepath.$processor::FILE);
-        $this->parser->process();
-    }
-
-
+class preserve_controller {
+	private $basepath = null;
+	private $courseid = null;
+	
+	public function __construct($source) {
+	
+	}
 }
+
+

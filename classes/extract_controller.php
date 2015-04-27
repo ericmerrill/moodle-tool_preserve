@@ -49,12 +49,16 @@ class extract_controller {
             $this->files = new dbdata\file();
             $this->files->create_temp_tables();
 
-            $parse = new xml\parser($basepath, $this->users);
+            $parser = new xml\parser();
+
+            $parser->setup($this->users, $basepath);
+            $parser->process();
 
             $users = $this->users;
             echo $DB->count_records($users::TABLE);
 
-            $parse = new xml\parser($basepath, $this->files);
+            $parser->set_processor($this->files);
+            $parser->process();
 
             $files = $this->files;
             echo $DB->count_records($files::TABLE);
