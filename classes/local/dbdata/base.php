@@ -31,7 +31,8 @@ defined('MOODLE_INTERNAL') || die();
 
 abstract class base extends \tool_preserve\local\xml\db_processor {
     const TABLE = 'temp_preserve_data';
-
+    const NAME = false;
+    const FILE = false;
 
     public function __construct() {
         parent::__construct();

@@ -23,21 +23,48 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_preserve\local\tasks;
+namespace tool_preserve\local\xml;
 
 defined('MOODLE_INTERNAL') || die();
 
-class course extends base {
 
-	public function setup() {
-	
-	}
-	
-	public abstract function exexute() {
-	
-	}
-	
-	public function cleanup() {
-	
-	}
+class all_path_processor extends processor {
+    const INFOREF = FALSE;
+
+    public function __construct() {
+        parent::__construct(array());
+
+    }
+
+    protected function dispatch_chunk($data) {
+
+    }
+
+    public function process_chunk($data) {
+        $path = $data['path'];
+
+        if (!$this->path_is_selected($path)) {
+            $this->add_path($path);
+        }
+
+        parent::process_chunk($data);
+    }
+
+    protected function notify_path_start($path) {
+        // nothing to do
+    }
+
+    protected function notify_path_end($path) {
+        // nothing to do
+    }
+
+    /**
+     * Provide NULL decoding
+     */
+    public function process_cdata($cdata) {
+        if ($cdata === '$@NULL@$') {
+            return null;
+        }
+        return $cdata;
+    }
 }

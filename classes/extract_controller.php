@@ -27,6 +27,7 @@ namespace tool_preserve;
 
 use \tool_preserve\local\dbdata;
 use \tool_preserve\local\xml;
+use \tool_preserve\local\tasks;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -50,7 +51,10 @@ class extract_controller {
         $this->create_temp_tables();
 
         if ($basepath) {
-            $this->load_data($basepath);
+            //$this->load_data($basepath);
+
+            $course = new tasks\course\task($basepath);
+            $course->execute();
 
         }
     }

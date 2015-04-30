@@ -23,26 +23,30 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_preserve\local\tasks;
+namespace tool_preserve\local\tasks\base;
 
 defined('MOODLE_INTERNAL') || die();
 
-abstract class base {
+abstract class file extends \tool_preserve\local\xml\all_path_processor {
+    const FILE = false;
+    const PATH = false;
 
-	public function setup() {
-	
-	}
-	
-	public abstract function exexute() {
-	
-	}
-	
-	public function cleanup() {
-	
-	}
-	
-	protected function is_backup() {
-		// TODO.
-		return true;
-	}
+    public function __construct() {
+        parent::__construct();
+
+        if (static::PATH) {
+            $this->add_path(static::PATH, true);
+        }
+    }
+
+    public function get_files($base) {
+        return array($base.static::FILE);
+    }
+
+
+    protected function dispatch_chunk($data) {
+        print_r($data);
+    }
+
+
 }
