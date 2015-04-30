@@ -24,19 +24,16 @@
  */
 
 namespace tool_preserve\local\tasks\course;
-
 use tool_preserve\local\tasks;
 
 defined('MOODLE_INTERNAL') || die();
 
-class file extends tasks\base\file {
-    const FILE = 'course/course.xml';
-    const PATH = '/course';
+class formatter extends tasks\base\formatter {
 
-    public $coursedata = false;
 
-    protected function dispatch_chunk($data) {
-        $this->coursedata = $data['tags'];
+    public function __construct() {
+        parent::__construct();
+        //$labels['shortname'];
     }
 
 }

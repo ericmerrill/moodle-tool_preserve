@@ -43,9 +43,49 @@ class task extends local\tasks\base\task {
         $parser->setup($processor, $this->basepath);
         $parser->process();
 
+        $format = new formatter();
+
+        $rawdata = $processor->coursedata;
+        $data = array();
+
+        foreach ($rawdata as $label => $value) {
+            $row = $format->get_pair($label, $value);
+
+            $data[] = $row;
+        }
+
+
+        foreach ($data as $row) {
+            print $row->label.': '.$row->value."<br>\n";
+        }
+
+        //print "<pre>"; print_r($rawdata); print "</pre>";
 	}
 
 	public function cleanup() {
 
 	}
+
+// 	protected function format_data($label, $value) {
+// 	    $output = array();
+// 	    $valuetype = ;
+// 	    switch ($label) {
+// 	        case '':
+//
+// 	            break;
+//             case '':
+//
+//                 break;
+//             default:
+//
+// 	    }
+// 	}
+//
+// 	protected function format_value() {
+//
+// 	}
+//
+// 	protected function format_label() {
+//
+// 	}
 }
