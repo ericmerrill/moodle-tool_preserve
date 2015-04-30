@@ -29,7 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 
 class inforef extends base {
     const NAME = 'inforef';
-    const FILE = '/inforef.xml';
+    const FILE = 'inforef.xml';
 
     public function __construct() {
         parent::__construct();
@@ -41,30 +41,38 @@ class inforef extends base {
             $pathvalue = '/inforef/' . $itemname . 'ref/' . $itemname;
             $this->add_path($pathvalue, true);
         }
-
-
     }
 
-    //protected $table = 'temp_preserve_users';
+    public function get_files($base) {
+        $allfiles = get_directory_list($base);
+        $filename = static::FILE;
+        $files = array();
 
-    /*protected $OUTPUTLIST = array('id',
-                                  'username',
-                                  'idnumber',
-                                  'email',
-                                  'firstname',
-                                  'middlename',
-                                  'lastname',
-                                  'deleted',
-                                  'firstaccess',
-                                  'lastaccess',
-                                  'lastlogin',
-                                  'currentlogin',
-                                  'timecreated',
-                                  'timemodified');*/
+        foreach ($allfiles as $file) {
+            if (strlen($file) >= strlen($filename)) {
+                if (substr_compare($file, $filename, strlen($file)-strlen($filename), strlen($filename)) === 0) {
+                    $files[] = $base.$file;
+                }
+            }
+        }
 
-    /*public function __construct($basepath = false) {
-        parent::__construct($basepath);
-    }*/
+        return $files;
+    }
+
+    protected function dispatch_chunk($data) {
+        global $DB;
+        // Received one user chunck, we are going to store it into backup_ids
+        // table, with name = user and parentid = contextid for later use
+
+        $obj = new \stdClass();
+        $obj->itemname = explode('/', $data['path'], 4)[2];
+        $obj->itemid = $data['tags']['id'];
+        $obj->info = \backup_controller_dbops::encode_backup_temp_info((object)$data['tags']);
+
+        if (!$DB->record_exists(static::TABLE, array('itemname' => $obj->itemname, 'itemid' => $obj->itemid))) {
+            $DB->insert_record(static::TABLE, $obj);
+        }
+    }
 
 
 }

@@ -37,6 +37,10 @@ abstract class base extends \tool_preserve\local\xml\db_processor {
         parent::__construct();
     }
 
+    public function get_files($base) {
+        return array($base.static::FILE);
+    }
+
     public function create_temp_tables() {
         global $DB;
         $table = new \xmldb_table(static::TABLE);

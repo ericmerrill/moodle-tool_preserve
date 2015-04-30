@@ -34,6 +34,7 @@ class extract_controller {
 
     protected $users = false;
     protected $files = false;
+    protected $inforef = false;
 
     protected $basepath = false;
 
@@ -42,41 +43,47 @@ class extract_controller {
 
     public function __construct($basepath = false) {
         global $DB;
+        $this->users = new dbdata\user();
+        $this->files = new dbdata\file();
+        $this->inforef = new dbdata\inforef();
+
+        $this->create_temp_tables();
+
         if ($basepath) {
-            $this->users = new dbdata\user();
-            $this->users->create_temp_tables();
+            $this->load_data($basepath);
 
-            $this->files = new dbdata\file();
-            $this->files->create_temp_tables();
-
-            $parser = new xml\parser();
-
-            $parser->setup($this->users, $basepath);
-            $parser->process();
-
-            $users = $this->users;
-            echo $DB->count_records($users::TABLE);
-
-            $parser->set_processor($this->files);
-            $parser->process();
-
-            $files = $this->files;
-            echo $DB->count_records($files::TABLE);
-
-
-            print_r(dbdata\base::get_record('file', 65519));
-
-            $this->drop_temp_tables();
         }
     }
 
-    public function create_temp_tables() {
+    public function __destruct() {
+        $this->drop_temp_tables();
+    }
 
+    public function load_data($basepath) {
+        $this->basepath = $basepath;
+
+        $parser = new xml\parser();
+
+        $parser->setup($this->inforef, $basepath);
+        $parser->process();
+
+        $parser->set_processor($this->users);
+        $parser->process();
+
+        $parser->set_processor($this->files);
+        $parser->process();
+    }
+
+    public function create_temp_tables() {
+        $this->users->create_temp_tables();
+        $this->files->create_temp_tables();
+        $this->inforef->create_temp_tables();
     }
 
     public function drop_temp_tables() {
         $this->users->drop_temp_tables();
         $this->files->drop_temp_tables();
+        $this->inforef->drop_temp_tables();
     }
 }
 

@@ -29,7 +29,8 @@ defined('MOODLE_INTERNAL') || die();
 
 class user extends base {
     const NAME = 'user';
-    const FILE = '/users.xml';
+    const FILE = 'users.xml';
+    const INFOREF = 'userref';
 
     public function __construct() {
         parent::__construct();

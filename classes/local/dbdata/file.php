@@ -29,7 +29,8 @@ defined('MOODLE_INTERNAL') || die();
 
 class file extends base {
     const NAME = 'file';
-    const FILE = '/files.xml';
+    const FILE = 'files.xml';
+    const INFOREF = 'fileref';
 
     public function __construct() {
         parent::__construct();

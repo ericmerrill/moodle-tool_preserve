@@ -53,12 +53,16 @@ class parser {
     }
 
     public function process() {
-        $this->parser = new \progressive_parser();
-        $this->parser->set_processor($this->processor);
+        $files = $this->processor->get_files($this->basepath);
 
-        $processor = $this->processor;
-        $this->parser->set_file($this->basepath.$processor::FILE);
-        $this->parser->process();
+        foreach ($files as $file) {
+            $this->parser = new \progressive_parser();
+            $this->parser->set_processor($this->processor);
+
+            $this->parser->set_file($file);
+            $this->parser->process();
+        }
+
     }
 
 
