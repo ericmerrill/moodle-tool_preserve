@@ -35,33 +35,54 @@ abstract class formatter {
     const FORMAT_TIME = 4;
     const FORMAT_USER = 5;
     const FORMAT_COURSE = 6;
+    const FORMAT_SIZE = 7;
+    const FORMAT_BOOL = 8;
+    const FORMAT_HIDE = 9;
 
     protected $strmanager = false;
 
-    protected $labels = array('id' => 'ID',
-                              'contextid' => 'Context ID',
-                              'timecreated' => 'Time Created',
-                              'timemodified' => 'Time Modified',
-                              'userid' => 'User',
-                              'courseid' => 'Course');
+    protected $labels = array('maxbytes' => array('maxbytes', 'admin'));
     protected $formats = array('id' => self::FORMAT_RAW,
                                'contextid' => self::FORMAT_RAW,
                                'timecreated' => self::FORMAT_DATE_TIME,
                                'timemodified' => self::FORMAT_DATE_TIME,
                                'userid' => self::FORMAT_USER,
-                               'courseid' => self::FORMAT_COURSE);
+                               'courseid' => self::FORMAT_COURSE,
+                               'maxbytes' => self::FORMAT_SIZE);
 
     public function __construct() {
         $this->strmanager = get_string_manager();
     }
 
     public function get_pair($label, $value) {
+        if (isset($this->formats[$label]) && $this->formats[$label] === self::FORMAT_HIDE) {
+            return false;
+        }
         $row = new \stdClass();
 
         $row->label = $this->get_label($label);
         $row->value = $this->get_value($label, $value);
 
         return $row;
+    }
+
+    public function format_row($row) {
+        $array = (array)$row;
+        foreach ($array as $label => $value) {
+            $array[$label] = $this->get_value($label, $value);
+        }
+
+        return (object)$array;
+    }
+
+    public function get_labels_row($row) {
+        $array = (array) $row;
+        $labels = new \stdClass();
+        foreach ($array as $label => $value) {
+            $labels->$label = $this->get_label($label);
+        }
+
+        return $labels;
     }
 
     public function get_value($label, $value) {
@@ -90,16 +111,19 @@ abstract class formatter {
                 $func = 'format_value_'.$label;
                 return $this->$func($value);
                 break;
+            case self::FORMAT_SIZE:
+                return display_size($value);
+                break;
+            case self::FORMAT_BOOL:
+                if ($value) {
+                    return $this->strmanager->get_string('yes');
+                } else {
+                    return $this->strmanager->get_string('no');
+                }
+                break;
         }
 
         return $value;
-    }
-
-    protected function get_undef_string($label) {
-        if ($this->strmanager->string_exists($label, '')) {
-            return $this->strmanager->get_string($label, '');
-        }
-        return "**{$label}**";
     }
 
     public function get_label($label) {
@@ -121,6 +145,18 @@ abstract class formatter {
 
         return $this->get_undef_string($label);
     }
+
+    protected function get_undef_string($label) {
+        if ($this->strmanager->string_exists($label, '')) {
+            return $this->strmanager->get_string($label, '');
+        }
+        if ($this->strmanager->string_exists($label, 'tool_preserve')) {
+            return $this->strmanager->get_string($label, 'tool_preserve');
+        }
+        return "**{$label}**";
+    }
+
+
 
 
 }

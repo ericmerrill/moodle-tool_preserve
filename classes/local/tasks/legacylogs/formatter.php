@@ -23,17 +23,20 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_preserve\local\output;
+namespace tool_preserve\local\tasks\legacylogs;
+use tool_preserve\local\tasks;
 
 defined('MOODLE_INTERNAL') || die();
 
-class html_info extends base {
+class formatter extends tasks\base\formatter {
 
-    const PLAINTEXT = false;
 
-    protected function format_row($row) {
-        //TODO formatting.
-        return $row->label.': '.$row->value."<br>\n";
+    public function __construct() {
+        parent::__construct();
+
+        $this->labels['module'] = array('activitymodule');
+        $this->labels['ip'] = array('ip_address');
+        $this->formats['time'] = self::FORMAT_DATE_TIME;
     }
 
 }

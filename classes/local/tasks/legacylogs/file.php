@@ -23,17 +23,43 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_preserve\local\output;
+namespace tool_preserve\local\tasks\legacylogs;
+
+use tool_preserve\local\tasks;
 
 defined('MOODLE_INTERNAL') || die();
 
-class html_info extends base {
+class file extends tasks\base\file {
+    const FILE = 'course/logs.xml';
+    const XMLPATH = '/logs/log';
 
-    const PLAINTEXT = false;
+    private $output = false;
+    private $formatter = false;
 
-    protected function format_row($row) {
-        //TODO formatting.
-        return $row->label.': '.$row->value."<br>\n";
+    private $firstrow = true;
+
+    public function __construct() {
+        parent::__construct();
+
+        $this->formatter = new formatter();
+    }
+
+    public function set_output($output) {
+        $this->output = $output;
+    }
+
+    protected function dispatch_chunk($data) {
+        if ($this->output) {
+            if ($this->firstrow) {
+                $labels = $this->formatter->get_labels_row($data['tags']);
+                $this->firstrow = false;
+                $this->output->set_fields($labels);
+                $this->output->output_labels();
+            }
+
+            $row = $this->formatter->format_row($data['tags']);
+            $this->output->output_row($row);
+        }
     }
 
 }

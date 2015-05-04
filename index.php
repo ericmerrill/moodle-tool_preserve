@@ -41,7 +41,7 @@ echo $OUTPUT->heading(get_string('pluginname', 'tool_preserve'));
 echo $OUTPUT->box_start();
 
 
-$controller = new \tool_preserve\extract_controller('/Users/merrill/ex/input/');
+$controller = new \tool_preserve\extract_controller('/Users/merrill/ex/output/', '/Users/merrill/ex/input/');
 
 // $controller->setup_temp_tables();
 // $controller->drop_temp_tables();

@@ -29,13 +29,13 @@ defined('MOODLE_INTERNAL') || die();
 
 abstract class file extends \tool_preserve\local\xml\all_path_processor {
     const FILE = false;
-    const PATH = false;
+    const XMLPATH = false;
 
     public function __construct() {
         parent::__construct();
 
-        if (static::PATH) {
-            $this->add_path(static::PATH, true);
+        if (static::XMLPATH) {
+            $this->add_path(static::XMLPATH, true);
         }
     }
 

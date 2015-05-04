@@ -38,11 +38,13 @@ class extract_controller {
     protected $inforef = false;
 
     protected $basepath = false;
+    protected $outputpath = false;
+    protected $output = false;
 
     const USER_TABLE = 'temp_preserve_users';
     const FILE_TABLE = 'temp_preserve_files';
 
-    public function __construct($basepath = false) {
+    public function __construct($outputpath = false, $basepath = false) {
         global $DB;
         $this->users = new dbdata\user();
         $this->files = new dbdata\file();
@@ -53,8 +55,13 @@ class extract_controller {
         if ($basepath) {
             //$this->load_data($basepath);
 
-            $course = new tasks\course\task($basepath);
+            $course = new tasks\course\task($outputpath, $basepath);
+
             $course->execute();
+
+            $llogs = new tasks\legacylogs\task($outputpath, $basepath);
+
+            $llogs->execute();
 
         }
     }

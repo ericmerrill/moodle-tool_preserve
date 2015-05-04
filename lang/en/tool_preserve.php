@@ -24,3 +24,11 @@
  */
 
 $string['pluginname'] = 'Data Preservation Tool';
+
+$string['id'] = 'ID';
+
+$string['contextid'] = 'Context ID';
+$string['timecreated'] = 'Time Created';
+$string['timemodified'] = 'Time Modified';
+$string['userid'] = 'User';
+$string['courseid'] = 'Course';

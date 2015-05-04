@@ -29,6 +29,39 @@ defined('MOODLE_INTERNAL') || die();
 
 class csv extends base {
 
+    protected $fields = false;
+
+    protected function format_row($row) {
+        if(is_object($row)) {
+            $fields = array_keys(get_object_vars($row));
+        }
+        else if(is_array($row)) {
+            $fields = array_keys($row);
+        }
+
+        $array  = (array)$row;
+        $values = array();
+        foreach($fields as $field) {
+            if(strpos($array[$field], ',')) {
+                $values[] = '"'.str_replace('"', '\"', $array[$field]).'"';
+            }
+            else {
+                $values[] = $array[$field];
+            }
+        }
 
 
+        //TODO formatting.
+        return implode(',', $values)."\r\n";
+    }
+
+    public function set_fields($fields) {
+        $this->fields = (object)$fields;
+    }
+
+    public function output_labels() {
+        if ($this->fields) {
+            $this->output_row($this->fields);
+        }
+    }
 }

@@ -31,7 +31,7 @@ defined('MOODLE_INTERNAL') || die();
 
 class file extends tasks\base\file {
     const FILE = 'course/course.xml';
-    const PATH = '/course';
+    const XMLPATH = '/course';
 
     public $coursedata = false;
 

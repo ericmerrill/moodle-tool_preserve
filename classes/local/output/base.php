@@ -28,7 +28,50 @@ namespace tool_preserve\local\output;
 defined('MOODLE_INTERNAL') || die();
 
 abstract class base {
+    protected $filepath = false;
 
+    protected $fh = false;
 
+    const PLAINTEXT = true;
+
+    public function __construct($file) {
+        $this->filepath = $file;
+    }
+
+    public function output_rows($data) {
+        foreach ($data as $row) {
+            $this->output_row($row);
+        }
+    }
+
+    public function output_row($row) {
+        if (!$this->fh) {
+            $this->open_file();
+        }
+
+        $info = $this->format_row($row);
+        print $info;
+        if (static::PLAINTEXT) {
+            print "<br>";
+        }
+        fwrite($this->fh, $info);
+    }
+
+    public function open_file() {
+        print "<br><hr><b>Opening file: {$this->filepath}:</b><br>";
+
+        if(!($this->fh = @fopen($this->filepath, 'w'))) {
+            print_error("Failed to open file: {$this->filepath}");
+        }
+    }
+
+    public function close_file() {
+        if ($this->fh) {
+            fclose($this->fh);
+            $this->fh = false;
+        }
+    }
+
+    protected abstract function format_row($row);
 
 }

@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_preserve\local\tasks\course;
+namespace tool_preserve\local\tasks\legacylogs;
 use tool_preserve\local;
 
 defined('MOODLE_INTERNAL') || die();
@@ -39,36 +39,21 @@ class task extends local\tasks\base\task {
         $parser = new local\xml\parser();
         $processor = new file();
 
+        $output = new local\output\csv($this->outputpath.'log.csv');
+        $processor->set_output($output);
 
         $parser->setup($processor, $this->basepath);
         $parser->process();
 
-        $format = new formatter();
-
-        $rawdata = $processor->coursedata;
-        $data = array();
-
-        foreach ($rawdata as $label => $value) {
-            $row = $format->get_pair($label, $value);
-            if ($row) {
-                $data[] = $row;
-            }
-        }
-
-
-        foreach ($data as $row) {
-            //print $row->label.': '.$row->value."<br>\n";
-        }
-
-        $output = new local\output\html_info($this->outputpath.'course.html');
-
-        $output->output_rows($data);
         $output->close_file();
 
-        //print "<pre>"; print_r($rawdata); print "</pre>";
 	}
 
 	public function cleanup() {
+
+	}
+
+	public function process_record($record) {
 
 	}
 

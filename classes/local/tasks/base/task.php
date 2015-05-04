@@ -29,9 +29,11 @@ defined('MOODLE_INTERNAL') || die();
 
 abstract class task {
     protected $basepath = false;
+    protected $outputpath = false;
 
-	public function __construct($basepath = false) {
+	public function __construct($output = false, $basepath = false) {
         $this->basepath = $basepath;
+        $this->outputpath = $output;
 	}
 
 	public abstract function execute();
