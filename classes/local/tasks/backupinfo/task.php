@@ -23,28 +23,32 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_preserve\local\tasks\course;
-
-use tool_preserve\local\tasks;
+namespace tool_preserve\local\tasks\backupinfo;
+use tool_preserve\local;
 
 defined('MOODLE_INTERNAL') || die();
 
-class file extends tasks\base\file {
-    const FILE = 'course/course.xml';
-    const XMLPATH = '/course';
+class task extends local\tasks\base\task {
 
-    protected function dispatch_chunk($data) {
-        $coursedata = $data['tags'];
-        $rows = array();
-        foreach ($coursedata as $label => $value) {
-            $row = $this->formatter->get_pair($label, $value);
-            if ($row) {
-                $rows[] = $row;
-            }
-        }
+	public function __construct($output = false, $basepath = false) {
+        parent::__construct($output, $basepath);
+	}
 
-        $this->output->output_rows($rows);
-        $this->output->close_file();
-    }
+	public function execute() {
+
+        $parser = new local\xml\parser();
+        $processor = new file(new formatter());
+
+        $output = new local\output\html_info($this->outputpath.'backupinfo.html');
+        $processor->set_output($output);
+
+        $parser->setup($processor, $this->basepath);
+        $parser->process();
+
+	}
+
+	public function cleanup() {
+
+	}
 
 }

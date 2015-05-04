@@ -23,44 +23,28 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_preserve\local\output;
+namespace tool_preserve\local\tasks\backupinfo;
+use tool_preserve\local\tasks;
 
 defined('MOODLE_INTERNAL') || die();
 
-class csv extends base {
+class file extends tasks\base\file {
+    const FILE = 'moodle_backup.xml';
+    const XMLPATH = '/moodle_backup/information';
 
-    protected $fields = false;
+    protected function dispatch_chunk($data) {
+        $coursedata = $data['tags'];
 
-    protected function format_row($row) {
-        if ($this->fields) {
-            $fields = array_keys(get_object_vars($this->fields));
-        } else if (is_object($row)) {
-            $fields = array_keys(get_object_vars($row));
-        } else if (is_array($row)) {
-            $fields = array_keys($row);
-        }
-
-        $array  = (array)$row;
-        $values = array();
-        foreach($fields as $field) {
-            if(strpos($array[$field], ',')) {
-                $values[] = '"'.str_replace('"', '\"', $array[$field]).'"';
-            }
-            else {
-                $values[] = $array[$field];
+        $rows = array();
+        foreach ($coursedata as $label => $value) {
+            $row = $this->formatter->get_pair($label, $value);
+            if ($row) {
+                $rows[] = $row;
             }
         }
 
-        return implode(',', $values)."\r\n";
+        $this->output->output_rows($rows);
+        $this->output->close_file();
     }
 
-    public function set_fields($fields) {
-        $this->fields = (object)$fields;
-    }
-
-    public function output_labels() {
-        if ($this->fields) {
-            $this->output_row($this->fields);
-        }
-    }
 }

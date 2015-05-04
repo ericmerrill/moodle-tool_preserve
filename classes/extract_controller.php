@@ -54,14 +54,14 @@ class extract_controller {
 
         if ($basepath) {
             //$this->load_data($basepath);
+            $binfo = new tasks\backupinfo\task($outputpath, $basepath);
+            $binfo->execute();
 
             $course = new tasks\course\task($outputpath, $basepath);
-
             $course->execute();
 
             $llogs = new tasks\legacylogs\task($outputpath, $basepath);
-
-            $llogs->execute();
+            //$llogs->execute();
 
         }
     }

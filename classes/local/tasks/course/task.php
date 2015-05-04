@@ -37,34 +37,14 @@ class task extends local\tasks\base\task {
 	public function execute() {
 
         $parser = new local\xml\parser();
-        $processor = new file();
+        $processor = new file(new formatter());
 
+        $output = new local\output\html_info($this->outputpath.'course.html');
+        $processor->set_output($output);
 
         $parser->setup($processor, $this->basepath);
         $parser->process();
 
-        $format = new formatter();
-
-        $rawdata = $processor->coursedata;
-        $data = array();
-
-        foreach ($rawdata as $label => $value) {
-            $row = $format->get_pair($label, $value);
-            if ($row) {
-                $data[] = $row;
-            }
-        }
-
-        foreach ($data as $row) {
-            //print $row->label.': '.$row->value."<br>\n";
-        }
-
-        $output = new local\output\html_info($this->outputpath.'course.html');
-
-        $output->output_rows($data);
-        $output->close_file();
-
-        //print "<pre>"; print_r($rawdata); print "</pre>";
 	}
 
 	public function cleanup() {

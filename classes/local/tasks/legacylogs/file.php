@@ -33,20 +33,7 @@ class file extends tasks\base\file {
     const FILE = 'course/logs.xml';
     const XMLPATH = '/logs/log';
 
-    private $output = false;
-    private $formatter = false;
-
     private $firstrow = true;
-
-    public function __construct() {
-        parent::__construct();
-
-        $this->formatter = new formatter();
-    }
-
-    public function set_output($output) {
-        $this->output = $output;
-    }
 
     protected function dispatch_chunk($data) {
         if ($this->output) {

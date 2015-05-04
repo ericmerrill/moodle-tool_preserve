@@ -38,6 +38,7 @@ abstract class formatter {
     const FORMAT_SIZE = 7;
     const FORMAT_BOOL = 8;
     const FORMAT_HIDE = 9;
+    const FORMAT_HTML = 10;
 
     protected $strmanager = false;
 
@@ -50,11 +51,25 @@ abstract class formatter {
                                'courseid' => self::FORMAT_COURSE,
                                'maxbytes' => self::FORMAT_SIZE);
 
+    // TODO - propigate black/whitelist more. Replace show/hide.
+    protected $whitelist = false;
+    protected $blacklist = false;
+
     public function __construct() {
         $this->strmanager = get_string_manager();
     }
 
     public function get_pair($label, $value) {
+        if ($this->whitelist) {
+            if (!in_array($label, $this->whitelist)) {
+                return false;
+            }
+        } else if ($this->blacklist) {
+            if (in_array($label, $this->blacklist)) {
+                return false;
+            }
+        }
+
         if (isset($this->formats[$label]) && $this->formats[$label] === self::FORMAT_HIDE) {
             return false;
         }

@@ -37,7 +37,7 @@ class task extends local\tasks\base\task {
 	public function execute() {
 
         $parser = new local\xml\parser();
-        $processor = new file();
+        $processor = new file(new formatter());
 
         $output = new local\output\csv($this->outputpath.'log.csv');
         $processor->set_output($output);

@@ -33,6 +33,7 @@ class html_info extends base {
 
     protected function format_row($row) {
         //TODO formatting.
+
         return $row->label.': '.$row->value."<br>\n";
     }
 

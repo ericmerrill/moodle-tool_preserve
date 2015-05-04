@@ -31,12 +31,21 @@ abstract class file extends \tool_preserve\local\xml\all_path_processor {
     const FILE = false;
     const XMLPATH = false;
 
-    public function __construct() {
+    protected $formatter = false;
+    protected $output = false;
+
+    public function __construct($formatter) {
         parent::__construct();
+
+        $this->formatter = $formatter;
 
         if (static::XMLPATH) {
             $this->add_path(static::XMLPATH, true);
         }
+    }
+
+    public function set_output($output) {
+        $this->output = $output;
     }
 
     public function get_files($base) {

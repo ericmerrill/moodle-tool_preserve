@@ -27,8 +27,14 @@ $string['pluginname'] = 'Data Preservation Tool';
 
 $string['id'] = 'ID';
 
+// Misc Strings.
 $string['contextid'] = 'Context ID';
 $string['timecreated'] = 'Time Created';
 $string['timemodified'] = 'Time Modified';
 $string['userid'] = 'User';
 $string['courseid'] = 'Course';
+
+// Backup info strings.
+$string['original_course_contextid'] = "Original course context ID";
+$string['original_site_identifier_hash'] = "Original site hash";
+$string['original_system_contextid'] = "Original system context ID";
