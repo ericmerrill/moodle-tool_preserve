@@ -43,6 +43,17 @@ class user extends base {
 
     }
 
+    public static function format_file_name($user) {
+        $obj = (object)$user;
+
+        $out = $obj->lastname.', '.$obj->firstname.'-'.$obj->id;
+
+        return $out;
+    }
+
+    public static function format_user_string($user) {
+
+    }
     //protected $table = 'temp_preserve_users';
 
     /*protected $OUTPUTLIST = array('id',

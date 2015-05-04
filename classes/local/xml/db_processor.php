@@ -46,13 +46,13 @@ class db_processor extends processor {
         $obj->itemid = $data['tags']['id'];
         $obj->info = \backup_controller_dbops::encode_backup_temp_info((object)$data['tags']);
 
-        $inforef = static::INFOREF;
+        /*$inforef = static::INFOREF;
         if ($inforef) {
             $params = array('itemname' => $inforef, 'itemid' => $obj->itemid);
             if (!$DB->record_exists(\tool_preserve\local\dbdata\inforef::TABLE, $params)) {
                 return;
             }
-        }
+        }*/
 
         if (!$DB->record_exists(static::TABLE, array('itemname' => $obj->itemname, 'itemid' => $obj->itemid))) {
             $DB->insert_record(static::TABLE, $obj);

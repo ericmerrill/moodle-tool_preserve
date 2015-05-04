@@ -53,15 +53,18 @@ class extract_controller {
         $this->create_temp_tables();
 
         if ($basepath) {
-            //$this->load_data($basepath);
+            $this->load_data($basepath);
             $binfo = new tasks\backupinfo\task($outputpath, $basepath);
             $binfo->execute();
 
             $course = new tasks\course\task($outputpath, $basepath);
             $course->execute();
 
+            $users = new tasks\users\task($outputpath, $basepath);
+            $users->execute();
+
             $llogs = new tasks\legacylogs\task($outputpath, $basepath);
-            //$llogs->execute();
+            $llogs->execute();
 
         }
     }
