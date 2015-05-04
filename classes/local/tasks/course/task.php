@@ -55,7 +55,6 @@ class task extends local\tasks\base\task {
             }
         }
 
-
         foreach ($data as $row) {
             //print $row->label.': '.$row->value."<br>\n";
         }
@@ -72,26 +71,4 @@ class task extends local\tasks\base\task {
 
 	}
 
-// 	protected function format_data($label, $value) {
-// 	    $output = array();
-// 	    $valuetype = ;
-// 	    switch ($label) {
-// 	        case '':
-//
-// 	            break;
-//             case '':
-//
-//                 break;
-//             default:
-//
-// 	    }
-// 	}
-//
-// 	protected function format_value() {
-//
-// 	}
-//
-// 	protected function format_label() {
-//
-// 	}
 }
